@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+
+import 'leaflet/dist/leaflet.css'
 
 export default {
   name: 'MapComponent',
@@ -23,23 +23,26 @@ export default {
     };
   },
   async mounted() {
-    await this.loadScript('https://cdn.osmbuildings.org/OSMBuildings-Leaflet.js');
 
-    // Inicialização do Leaflet
-    try {
-      this.map = L.map(this.$refs.map).setView([-8.08, -34.90191], 13);
-      L.tileLayer(this.layerMaps[this.layerMap], {
-        maxZoom: 19,
-      }).addTo(this.map);
-      console.log('Leaflet initialized successfully');
-    } catch (error) {
-      console.error('Leaflet initialization error:', error);
-    }
+    await this.loadScript('https://cdn.osmbuildings.org/4.1.1/OSMBuildings.js');
 
-    // Inicialização do OSM Buildings
     try {
-      new window.OSMBuildings(this.map).load();
+
+      this.osmb = new window.OSMBuildings({
+        container: this.$refs.map,
+        position: { latitude: -8.08, longitude: -34.90191 },
+        tilt: 30,
+        zoom: 16,
+        minZoom: 15,
+        maxZoom: 20,
+        attribution: '© Map & Geo Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a> © 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
+      });
+
+      this.osmb.addMapTiles(this.layerMaps[this.layerMap]);
+      this.osmb.addGeoJSONTiles('https://{s}-data.onegeo.co/maps/tiles/{z}/{x}/{y}.json?token=5se76u6aj5ycdbpq', { fixedZoom: 15 });
+
       console.log('OSM Buildings initialized successfully');
+
     } catch (error) {
       console.error('OSM Buildings initialization error:', error);
     }
