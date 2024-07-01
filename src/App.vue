@@ -1,16 +1,21 @@
 <template>
   <div id="app">
-    <MapComponent />
+    <MapOsmComponent />
+    <br>
+    <br>
+    <MapLeafletComponent />
   </div>
 </template>
 
 <script>
-import MapComponent from './components/MapComponent.vue'
+import MapOsmComponent from './components/MapOsmComponent.vue'
+import MapLeafletComponent from './components/MapLeafletComponent.vue'
 
 export default {
   name: 'App',
   components: {
-    MapComponent
+    MapOsmComponent,
+    MapLeafletComponent
   }
 }
 </script>
