@@ -1,25 +1,25 @@
 <template>
   <div id="app">
-    <!-- <MapGoogleComponent /><br> -->
-    <MapGoogleSampleComponent /><br>
+    <MapGoogleComponent /><br>
     <MapOsmComponent /><br>
-    <MapLeafletComponent />
+    <MapLeafletComponent /><br>
+    <!-- <MapGoogleOsmComponent /> -->
   </div>
 </template>
 <script>
-/* import MapGoogleComponent from './components/MapGoogleComponent.vue' */
-import MapGoogleSampleComponent from './components/MapGoogleSampleComponent.vue'
-import MapOsmComponent from './components/MapOsmComponent.vue'
-import MapLeafletComponent from './components/MapLeafletComponent.vue'
-export default {
-  name: 'App',
-  components: {
-    /* MapGoogleComponent, */
-    MapGoogleSampleComponent,
-    MapOsmComponent,
-    MapLeafletComponent
+  import MapGoogleComponent from './components/MapGoogleComponent.vue'
+  import MapOsmComponent from './components/MapOsmComponent.vue'
+  import MapLeafletComponent from './components/MapLeafletComponent.vue'
+  //import MapGoogleOsmComponent from './components/MapGoogleOsmComponent.vue'
+  export default {
+    name: 'App',
+    components: {
+      MapGoogleComponent,
+      MapOsmComponent,
+      MapLeafletComponent,
+      //MapGoogleOsmComponent
+    }
   }
-}
 </script>
 <style>
 #app {

@@ -5,20 +5,24 @@
 </template>
 
 <script>
-
 import { Loader } from '@googlemaps/js-api-loader';
 import * as THREE from 'three';
+//import * as OSMBuildings from 'osmbuildings';
 
 export default {
-  name: 'MapGoogleSampleComponent',
+  name: 'MapGoogleOsmComponent',
   data() {
     return {
       map: null,
       markers: [],
-      animationFrameId: null
+      osmb: null,
+      animationFrameId: null,
     };
   },
   async mounted() {
+
+    await this.loadScript('https://cdn.osmbuildings.org/4.1.1/OSMBuildings.js');
+
     const apiOptions = {
       apiKey: 'AIzaSyDEP0W1aRUiHh3K8izlwk7zUWj6-XyotxY',
       version: 'beta',
@@ -35,8 +39,8 @@ export default {
       mapId: 'd3b3f166493c990b',
       mapTypeId: 'satellite',
       mapTypeControl: true,
-      zoomControl: false,
-      fullscreenControl: false,
+      zoomControl: true,
+      fullscreenControl: true,
     };
 
     this.map = new google.maps.Map(this.$refs.map, mapOptions);
@@ -61,6 +65,18 @@ export default {
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
         directionalLight.position.set(0.5, -1, 0.5);
         scene.add(directionalLight);
+
+        // Inicializa OSM Buildings
+        this.osmb = new window.OSMBuildings({
+          minZoom: 15,
+          maxZoom: 20,
+        });
+
+        // Adiciona os dados GeoJSON do OSM Buildings
+        this.osmb.addGeoJSONTiles('https://{s}-data.onegeo.co/maps/tiles/{z}/{x}/{y}.json?token=5se76u6aj5ycdbpq', { fixedZoom: 15 });
+
+        // Renderiza os edifícios no Three.js
+        scene.add(this.osmb);
       };
 
       // eslint-disable-next-line no-unused-vars
@@ -114,6 +130,15 @@ export default {
 
       this.markers.push(marker);
     },
+    loadScript(src) {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = src;
+          script.onload = () => resolve();
+          script.onerror = () => reject(new Error(`Script load error for ${src}`));
+          document.head.appendChild(script);
+        });
+      }
   },
 };
 </script>
