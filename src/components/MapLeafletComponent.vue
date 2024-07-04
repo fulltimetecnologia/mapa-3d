@@ -5,6 +5,7 @@
 </template>
 
 <script>
+
 import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -23,27 +24,20 @@ export default {
     };
   },
   async mounted() {
-    await this.loadScript('https://cdn.osmbuildings.org/classic/0.2.2b/OSMBuildings-Leaflet.js');
 
-    const newMap = new L.Map(this.$refs.map, {
+    const map = new L.Map(this.$refs.map, {
       zoomControl: true,
       attributionControl: false
     });
 
-    newMap.setView([-8.08, -34.90191], 16, false);
+    map.setView([-8.08, -34.90191], 16, false);
 
     new L.TileLayer(this.layerMaps[this.layerMap], {
       attribution: '© Map & Geo Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a> © 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>',
       maxZoom: 18,
       maxNativeZoom: 20
-    }).addTo(newMap);
+    }).addTo(map);
 
-    try {
-      const osmb = new window.OSMBuildings(newMap);
-      this.map = osmb.load('https://{s}-data.onegeo.co/maps/tiles/{z}/{x}/{y}.json?token=5se76u6aj5ycdbpq');
-    } catch (error) {
-      console.error('Error loading OSM Buildings data:', error);
-    }
   },
   methods: {
     loadScript(src) {
