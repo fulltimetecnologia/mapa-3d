@@ -35,16 +35,10 @@
           attribution: '© Map & Geo Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a> © 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
         });
 
-        const markerOptions = {
-          latitude: -8.078538,
-          longitude: -34.894298,
-          altitude: 10 + Math.random() * 50
-        };
-  
-        this.osmb.addMarker(markerOptions, null, {color: '#f26722'});
         this.osmb.addMapTiles(this.layerMaps[this.layerMap]);
         this.osmb.addGeoJSONTiles('https://{s}-data.onegeo.co/maps/tiles/{z}/{x}/{y}.json?token=5se76u6aj5ycdbpq', { fixedZoom: 15 });
-  
+        this.osmb.addMarker( {latitude: -8.078538,longitude: -34.894298,altitude: 10 + Math.random() * 50 }, {id: 1}, {icon: this.osmb.divIcon({className: this.getIconClass('Homicidio/Tentativa')})});  
+
         console.log('OSM Buildings initialized successfully');
       } catch (error) {
         console.error('OSM Buildings initialization error:', error);
@@ -59,7 +53,27 @@
           script.onerror = () => reject(new Error(`Script load error for ${src}`));
           document.head.appendChild(script);
         });
-      }
+      },
+      getIconClass(type) {
+        switch (type) {
+        case 'Homicidio/Tentativa':
+          return 'icon-marker-1'
+        case 'Tentativa/Roubo':
+          return 'icon-marker-2'
+        case 'Briga':
+          return 'icon-marker-3'
+        case 'Ação policial':
+          return 'icon-marker-4'
+        case 'Ataque a civis':
+          return 'icon-marker-5'
+        case 'Não identificado':
+          return 'icon-marker-6'
+        case 'Operação policial':
+          return 'icon-marker-7'
+        case 'Sequestro/Cárcere Privado':
+          return 'icon-marker-8'
+        }
+      },
     }
   };
   </script>
@@ -70,5 +84,75 @@
     height: 500px;
     position: relative;
   }
+  
+  .icon-marker-1 {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background-color: rgb(209, 53, 43);
+    border-radius: 100%;
+    box-shadow: 0px 0px 0px 5px rgba(209, 53, 43, 0.3);
+}
+
+.icon-marker-2 {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background-color: #52aba4;
+    border-radius: 100%;
+    box-shadow: 0px 0px 0px 5px rgba(82, 171, 164, 0.3);
+}
+
+.icon-marker-3 {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background-color: #b98859;
+    border-radius: 100%;
+    box-shadow: 0px 0px 0px 5px rgba(185, 136, 89, 0.3);
+}
+
+.icon-marker-4 {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background-color: rgb(23, 52, 207);
+    border-radius: 100%;
+    box-shadow: 0px 0px 0px 5px rgba(23, 52, 207, 0.3);
+}
+
+.icon-marker-5 {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background-color: rgb(231, 183, 8);
+    border-radius: 100%;
+    box-shadow: 0px 0px 0px 5px rgba(231, 183, 8, 0.3);
+}
+
+.icon-marker-6 {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background-color: rgb(117, 117, 117);
+    border-radius: 100%;
+    box-shadow: 0px 0px 0px 5px rgba(117, 117, 117, 0.3);
+}
+.icon-marker-7 {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background-color: rgb(232, 14, 203);
+    border-radius: 100%;
+    box-shadow: 0px 0px 0px 5px rgba(232, 14, 203, 0.3);
+}
+.icon-marker-8 {
+    display: block;
+    width: 5px;
+    height: 5px;
+    background-color: blueviolet;
+    border-radius: 100%;
+    box-shadow: 0px 0px 0px 5px rgba(138, 43, 226, 0.3);
+}
   </style>
   
