@@ -5,9 +5,9 @@
 </template>
 
 <script>
+
 import { Loader } from '@googlemaps/js-api-loader';
 import * as THREE from 'three';
-//import * as OSMBuildings from 'osmbuildings';
 
 export default {
   name: 'MapGoogleOsmComponent',
@@ -51,13 +51,16 @@ export default {
     this.addMarker({ lat: -8.078538, lng: -34.894298, color: '#f26722' });
     this.addMarker({ lat: -8.079, lng: -34.895, color: '#00ff00' });
     this.addMarker({ lat: -8.08, lng: -34.896, color: '#0000ff' });
+
   },
   methods: {
     async initWebGLOverlayView() {
+
       let scene, renderer, camera;
       const webGLOverlayView = new google.maps.WebGLOverlayView();
 
       webGLOverlayView.onAdd = () => {
+
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera();
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
@@ -66,21 +69,15 @@ export default {
         directionalLight.position.set(0.5, -1, 0.5);
         scene.add(directionalLight);
 
-        // Inicializa OSM Buildings
-        this.osmb = new window.OSMBuildings({
-          minZoom: 15,
-          maxZoom: 20,
-        });
-
-        // Adiciona os dados GeoJSON do OSM Buildings
+        this.osmb = new window.OSMBuildings({ minZoom: 15, maxZoom: 20}); 
         this.osmb.addGeoJSONTiles('https://{s}-data.onegeo.co/maps/tiles/{z}/{x}/{y}.json?token=5se76u6aj5ycdbpq', { fixedZoom: 15 });
-
-        // Renderiza os edifícios no Three.js
         scene.add(this.osmb);
+
       };
 
       // eslint-disable-next-line no-unused-vars
       webGLOverlayView.onContextRestored = ({ gl }) => {
+
         renderer = new THREE.WebGLRenderer({
           canvas: gl.canvas,
           context: gl,
@@ -90,8 +87,7 @@ export default {
         renderer.autoClear = false;
 
         const animate = () => {
-          // eslint-disable-next-line no-undef
-          requestAnimationFrame(animate);
+          this.animationFrameId = requestAnimationFrame(animate);
           this.map.moveCamera({
             tilt: 30,
             heading: this.map.getHeading() + 0.2,
@@ -105,8 +101,16 @@ export default {
       // eslint-disable-next-line no-unused-vars
       webGLOverlayView.onDraw = ({ gl, transformer }) => {
         webGLOverlayView.requestRedraw();
-        renderer.render(scene, camera);
-        renderer.resetState();
+        try {
+          renderer.render(scene, camera);
+          renderer.resetState();
+        } catch (error) {
+          if (error.message.includes('ResizeObserver loop')) {
+            console.warn('ResizeObserver loop error ignored.');
+          } else {
+            throw error;
+          }
+        }
       };
 
       this.map.addListener('mousedown', () => cancelAnimationFrame(this.animationFrameId));
@@ -131,14 +135,14 @@ export default {
       this.markers.push(marker);
     },
     loadScript(src) {
-        return new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = src;
-          script.onload = () => resolve();
-          script.onerror = () => reject(new Error(`Script load error for ${src}`));
-          document.head.appendChild(script);
-        });
-      }
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error(`Script load error for ${src}`));
+        document.head.appendChild(script);
+      });
+    },
   },
 };
 </script>
